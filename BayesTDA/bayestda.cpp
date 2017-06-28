@@ -13,6 +13,9 @@
 
 using namespace std;
 
+// buffer value to prevent NAN in certain calculations 
+double EPS = 1e-50;
+
 // constructor for bayesRegressionDM class
 btda::bayesRegressionDM::bayesRegressionDM(int numScales, int numWavelets, int numCovariates, int numSamples, vector< vector< float > > & waveletCoefficients, vector< vector< float > > & covariateMatrix, vector <int> & use, bool groupScaling)
 {
@@ -44,7 +47,7 @@ void btda::bayesRegressionDM::computePosteriorProbabilities(vector <int> & wavel
     // Declare constants
     double lnBF1, lnBF2, lnBF3; // store log Bayes factors
     double denom;               // stores weighted sum of Bayes Factors
-    double EPS = 1e-30;
+//    double EPS = 1e-30;
     
     // Allocate memory for arrays
     vector<double> ssWavelets(3, 0.0);
@@ -137,7 +140,6 @@ void btda::bayesRegressionDM::expectationMaximization(vector <int> & waveletCoor
     // constants
     int NITERS = 1000;
     double thresh = 1e-20;
-    double eps = 1e-20;
     
     /* Perform Expectation Maximization */
     double relativeLikelihood, lnLikelihoodOld = 0.0, lnLikelihood = -1.0;
@@ -184,7 +186,7 @@ void btda::bayesRegressionDM::expectationMaximization(vector <int> & waveletCoor
         }
         
         // compute relative likelihood
-        relativeLikelihood = abs(lnLikelihoodOld - lnLikelihood) / abs(lnLikelihoodOld + eps);
+        relativeLikelihood = abs(lnLikelihoodOld - lnLikelihood) / abs(lnLikelihoodOld + EPS);
         iters += 1;
     } while (relativeLikelihood > thresh && iters < NITERS);
 }
@@ -223,17 +225,28 @@ double btda::bayesRegressionDM::computeSingleLogLikelihood(vector <double> & tem
     
     lnBF3 = computeLnBayesFactor3(ssWavelets, ssCovariates, ssWaveletCovariate);
     
+    // update gamma values -- written to prevent exponential term from blowing up...
+    double denom = (piEstimates[s * 4] * exp(-lnBF3) +
+                    piEstimates[s * 4 + 1] * exp(lnBF1 - lnBF3) +
+                    piEstimates[s * 4 + 2] * exp(lnBF2 - lnBF3) +
+                    piEstimates[s * 4 + 3]);
     
-    // update gamma values
-    double denom = (piEstimates[s * 4] +
-                    piEstimates[s * 4 + 1] * exp(lnBF1) +
-                    piEstimates[s * 4 + 2] * exp(lnBF2) +
-                    piEstimates[s * 4 + 3] * exp(lnBF3));
-    
-    gamma0 = piEstimates[s * 4] / denom;
-    gamma1 = (piEstimates[s * 4 + 1] * exp(lnBF1)) / denom;
-    gamma2 = (piEstimates[s * 4 + 2] * exp(lnBF2)) / denom;
+    gamma0 = (piEstimates[s * 4] * exp(-lnBF3)) / denom;
+    gamma1 = (piEstimates[s * 4 + 1] * exp(lnBF1 - lnBF3)) / denom;
+    gamma2 = (piEstimates[s * 4 + 2] * exp(lnBF2 - lnBF3)) / denom;
     gamma3 = 1 - gamma0 - gamma1 - gamma2;
+    
+    
+// ORIGINAL CODE -- KEEP IN CASE THE NEW METHOD IS INVALID OR FAILS
+//    // update gamma values
+//    double denom = (piEstimates[s * 4] +
+//                    piEstimates[s * 4 + 1] * exp(lnBF1) +
+//                    piEstimates[s * 4 + 2] * exp(lnBF2) +
+//                    piEstimates[s * 4 + 3] * exp(lnBF3));
+//    gamma0 = piEstimates[s * 4] / denom;
+//    gamma1 = (piEstimates[s * 4 + 1] * exp(lnBF1)) / denom;
+//    gamma2 = (piEstimates[s * 4 + 2] * exp(lnBF2)) / denom;
+//    gamma3 = 1 - gamma0 - gamma1 - gamma2;
     
     // update the piEstimates arrray for the next step.
     tempPiEstimates[s * 4] += gamma0;
@@ -242,10 +255,10 @@ double btda::bayesRegressionDM::computeSingleLogLikelihood(vector <double> & tem
     tempPiEstimates[s * 4 + 3] += gamma3;
     
     // compute log-likelihood
-    logLikelihood = gamma0 * log(piEstimates[s * 4]);
-    logLikelihood += gamma1 * log(piEstimates[s * 4 + 1]) + gamma1 * lnBF1;
-    logLikelihood += gamma2 * log(piEstimates[s * 4 + 2]) + gamma2 * lnBF2;
-    logLikelihood += gamma3 * log(piEstimates[s * 4 + 3]) + gamma3 * lnBF3;
+    logLikelihood = gamma0 * log(piEstimates[s * 4] + EPS);
+    logLikelihood += gamma1 * log(piEstimates[s * 4 + 1] + EPS) + gamma1 * lnBF1;
+    logLikelihood += gamma2 * log(piEstimates[s * 4 + 2] + EPS) + gamma2 * lnBF2;
+    logLikelihood += gamma3 * log(piEstimates[s * 4 + 3] + EPS) + gamma3 * lnBF3;
     
     return logLikelihood;
 }
@@ -341,7 +354,7 @@ double btda::bayesRegressionDM::computeLnBayesFactor3(vector< double > & ssWavel
      */
     
     lnBF = log(numSamples) - log(priorK) - log(computeDeterminant2x2(sxx));
-    lnBF += (double) (m + numSamples) / (double) 2 * (log(computeDeterminant2x2(sx0x0)) - log(computeDeterminant2x2(s_w_given_x)));
+    lnBF += (double) (m + numSamples) / (double) 2 * (log(computeDeterminant2x2(sx0x0) + EPS) - log(computeDeterminant2x2(s_w_given_x)) + EPS);
     
     return lnBF;
 }
@@ -451,7 +464,7 @@ double btda::bayesRegressionDM::computeLnBayesFactor12(vector<double> & ssWavele
     invert3x3Matrix(sxx, sxx_inv);
     
     /* Compute log Bayes Factor */
-    lnBF = log(computeDeterminant2x2(stxtx)) - log(computeDeterminant3x3(sxx)) - log(priorK);
+    lnBF = log(computeDeterminant2x2(stxtx) + EPS) - log(computeDeterminant3x3(sxx) + EPS) - log(priorK);
     
     // Compute ln of S_{W|X} terms
     double temp_den, temp_num;
