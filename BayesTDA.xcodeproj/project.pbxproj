@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6F2C5F2F1F03F93100BBF2CC /* bayestda.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2C5F2A1F03F93100BBF2CC /* bayestda.cpp */; };
-		6F2C5F301F03F93100BBF2CC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2C5F2D1F03F93100BBF2CC /* main.cpp */; };
+		6F2C5F361F03FCB900BBF2CC /* bayestda.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2C5F311F03FCB900BBF2CC /* bayestda.cpp */; };
+		6F2C5F371F03FCB900BBF2CC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F2C5F341F03FCB900BBF2CC /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,11 +25,11 @@
 
 /* Begin PBXFileReference section */
 		6F2C5F201F03F90F00BBF2CC /* BayesTDA */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BayesTDA; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F2C5F2A1F03F93100BBF2CC /* bayestda.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bayestda.cpp; path = ../../../Desktop/BayesTDA/source/bayestda.cpp; sourceTree = "<group>"; };
-		6F2C5F2B1F03F93100BBF2CC /* bayestda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bayestda.h; path = ../../../Desktop/BayesTDA/source/bayestda.h; sourceTree = "<group>"; };
-		6F2C5F2C1F03F93100BBF2CC /* linalg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = linalg.h; path = ../../../Desktop/BayesTDA/source/linalg.h; sourceTree = "<group>"; };
-		6F2C5F2D1F03F93100BBF2CC /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../Desktop/BayesTDA/source/main.cpp; sourceTree = "<group>"; };
-		6F2C5F2E1F03F93100BBF2CC /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = main.py; path = ../../../Desktop/BayesTDA/source/main.py; sourceTree = "<group>"; };
+		6F2C5F311F03FCB900BBF2CC /* bayestda.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bayestda.cpp; sourceTree = "<group>"; };
+		6F2C5F321F03FCB900BBF2CC /* bayestda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bayestda.h; sourceTree = "<group>"; };
+		6F2C5F331F03FCB900BBF2CC /* linalg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = linalg.h; sourceTree = "<group>"; };
+		6F2C5F341F03FCB900BBF2CC /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		6F2C5F351F03FCB900BBF2CC /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,11 +62,11 @@
 		6F2C5F221F03F90F00BBF2CC /* BayesTDA */ = {
 			isa = PBXGroup;
 			children = (
-				6F2C5F2A1F03F93100BBF2CC /* bayestda.cpp */,
-				6F2C5F2B1F03F93100BBF2CC /* bayestda.h */,
-				6F2C5F2C1F03F93100BBF2CC /* linalg.h */,
-				6F2C5F2D1F03F93100BBF2CC /* main.cpp */,
-				6F2C5F2E1F03F93100BBF2CC /* main.py */,
+				6F2C5F311F03FCB900BBF2CC /* bayestda.cpp */,
+				6F2C5F321F03FCB900BBF2CC /* bayestda.h */,
+				6F2C5F331F03FCB900BBF2CC /* linalg.h */,
+				6F2C5F341F03FCB900BBF2CC /* main.cpp */,
+				6F2C5F351F03FCB900BBF2CC /* main.py */,
 			);
 			path = BayesTDA;
 			sourceTree = "<group>";
@@ -128,8 +128,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F2C5F2F1F03F93100BBF2CC /* bayestda.cpp in Sources */,
-				6F2C5F301F03F93100BBF2CC /* main.cpp in Sources */,
+				6F2C5F371F03FCB900BBF2CC /* main.cpp in Sources */,
+				6F2C5F361F03FCB900BBF2CC /* bayestda.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +258,7 @@
 				6F2C5F291F03F90F00BBF2CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
