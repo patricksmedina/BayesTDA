@@ -170,7 +170,7 @@ void btda::bayesRegressionDM::expectationMaximization(vector <int> & waveletCoor
                 }
             }
             
-            // update the max lnLikelihood for the
+            // update the max lnLikelihood for the covariate
             if (lnLikelihood > lnLikelihoodRatios[cov])
             {
                 lnLikelihoodRatios[cov] = lnLikelihood;
